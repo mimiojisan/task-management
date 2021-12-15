@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.bodyColor {
+  background: rgba(249, 247, 245, 0.5);
+}
+
+input {
+  background: rgba(249, 247, 245, 0.5);
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+
+/* #days */
+#days p {
+  margin-bottom: 0;
+  font-family: "Nunito Sans", sans-serif;
+}
+.clock_wrapper {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clock {
+  width: 300px;
+  margin: 0 auto;
+  padding: 12px;
+  box-sizing: border-box;
+  background: rgba(249, 247, 245, 0.5);
+  z-index: 2;
+}
+.clock_date {
+  font-size: 16px;
+  position: relative;
+}
+.clock_time {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* #app */
+.topbtn {
+  padding: 0 12px;
+}
+
+@media screen and (max-width: 520px) {
+  .under {
+    margin-bottom: 10px;
+  }
+}
+
+.items,
+.item {
+  transition: 0.4s background;
+}
+
+.item.hover {
+  background: #c8ebfb;
+  outline: 2px solid #fff;
+}
+
+.items.hover {
+  background: rgb(249, 247, 245);
+}
+
+.days input {
+  width: 100%;
+  border: none;
+  padding: 0.375rem 0.75rem;
+}
+
+.uil-list-ul {
+  font-size: 2rem;
+}
+
+.completeCountStyle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet">
+
+
+    <title>たすくん</title>
+
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <!-- vue-good-table -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bodyColor">
+    <div id="app" class="app">
+      <div class="container">
+        <!-- タスクグループの追加用 -->
+        <div class="row mt-5 mb-3 topbtn">
+          <div class="col-auto under">
+            <button class="btn btn-primary" @click="addGroup">
+              <i class="fas fa-plus-circle pe-2"></i>ADD A TASK GROUP
+            </button>
+          </div>
+          <!-- 完了タスクの一覧表示用 -->
+          <div class="col-auto">
+            <button class="btn btn-danger" @click="doneTaskList">
+              <i class="fas fa-list-alt pe-2"></i>LIST OF COMPLETED TASKS
+            </button>
+          </div>
+        </div>
+        <!-- タスクグループをドラッグできるように設定 -->
+        <draggable
+          class="row flex-nowrap w-120"
+          ghost-class="ghost"
+          style="overflow: auto"
+          @end="saveCurrent"
+        >
+          <div
+            class="col-md-4 items py-4"
+            v-for="(item,index) in taskList"
+            :key="'task-' + index"
+            v-on:mouseenter="addClass($event)"
+            v-on:mouseleave="removeClass($event)"
+          >
+            <!-- タスクグループの入力欄 -->
+            <div class="mb-3 p-3">
+              <input
+                type="text"
+                class="form-control fw-bold"
+                v-model="item.name"
+                placeholder="Enter the task group name"
+              />
+              <!-- タスクグループの削除 -->
+              <div class="text-end mt-2">
+                <div class="days">
+                  <vuejs-datepicker
+                    :language="ja"
+                    :format="DatePickerFormat"
+                    class="pb-2"
+                    v-model="item.time"
+                    placeholder="Select a date"
+                  ></vuejs-datepicker>
+                </div>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  v-on:click="delGroup(index)"
+                >
+                  <i class="fas fa-times-circle pe-2"></i>DELETE A TASK GROUP
+                </button>
+              </div>
+            </div>
+            <div class="bodyColor rounded">
+              <!-- タスクをドラッグできるように設定 -->
+              <draggable
+                class="items"
+                ghost-class="ghost"
+                :list="item.task"
+                group="task"
+                @end="saveCurrent"
+              >
+                <div
+                  class="item p-3 mb-2"
+                  v-for="(item2,index2) in item.task"
+                  :key="'item-' + index2"
+                  v-on:mouseenter="addClass($event)"
+                  v-on:mouseleave="removeClass($event)"
+                >
+                  <!-- タスクの入力欄 -->
+                  <textarea
+                    class="form-control"
+                    style="height: 100px"
+                    v-model="item2.name"
+                    placeholder="Enter the task "
+                  ></textarea>
+                  <!-- タスクの完了•削除 -->
+                  <div class="text-end">
+                    <div class="days">
+                      <vuejs-datepicker
+                        :language="ja"
+                        :format="DatePickerFormat"
+                        class="pb-2"
+                        v-model="item2.time"
+                        placeholder="Select a date"
+                      ></vuejs-datepicker>
+                    </div>
+                    <button
+                      class="btn btn-sm btn-outline-success mb-2"
+                      @click="addDone(item,index2)"
+                    >
+                      <i class="fas fa-check-circle pe-2"></i>COMPLETE THE TASK
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-danger mb-2"
+                      @click="delTask(item.task,index2)"
+                    >
+                      <i class="fas fa-times-circle pe-2"></i>DELETE A TASK
+                    </button>
+                  </div>
+                </div>
+              </draggable>
+            </div>
+            <!-- タスクの追加 -->
+            <div class="p-3">
+              <button class="btn w-100 btn-secondary" @click="addTask(taskList, index, item)">
+                <i class="fas fa-plus-circle pe-2"></i>ADD A TASK
+              </button>
+            </div>
+          </div>
+        </draggable>
+        <!-- 完了タスクの一覧表示用テーブル -->
+        <vue-good-table
+          v-if="doneTaskFlg"
+          class="mt-3 w-120"
+          :columns="columns"
+          :rows="rows"
+          max-height="200px"
+          :fixed-header="true"
+          :select-options="{ enabled: true, }"
+          :search-options="{ enabled: true }"
+          @on-selected-rows-change="selectionChanged"
+        >
+          <div slot="selected-row-actions">
+            <button
+              class="btn btn-sm btn-danger"
+              @click="delRecord(rows, rowSelection)"
+            >
+              DELETE
+            </button>
+          </div>
+        </vue-good-table>
+      </div>                                                                                                                                                                                                                                                                                                                                    
+    </div>
+    <div id="modal">
+    </div>
+
+    <script src="https://unpkg.com/vue@2.6.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/locale/translations/ja.js"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
