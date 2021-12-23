@@ -53,18 +53,18 @@ var app = new Vue({
     const vm = this;
     // ローカルストレージからデータを読み込む
     let savedTasks = localStorage.getItem("taskList");
-    // データがあれば代入、なければからタスクの読み込み
-    if (savedTasks) {
+    // データがあれば代入
+    if (savedTasks && savedTasks !== "null") {
       savedTasks = JSON.parse(savedTasks);
+      vm.$set(vm, "taskList", savedTasks);
     } 
-    vm.$set(vm, "taskList", savedTasks);
 
     let savedRecord = localStorage.getItem("rows");
-    // データがあれば代入、なければからレコードの読み込み
-    if (savedRecord) {
+    // データがあれば代入
+    if (savedRecord && savedRecord !== "null") {
       savedRecord = JSON.parse(savedRecord);
-    } 
-    vm.$set(vm, "rows", savedRecord);
+      vm.$set(vm, "rows", savedRecord);
+    }
   },
   methods: {
     // ホバー時のアクション（追加）
@@ -87,7 +87,7 @@ var app = new Vue({
     },
     // タスクの追加
     addTask(taskList, index, item) {
-      if(taskList[index].name && taskList[index].time){
+      if(taskList[index].name !== "null" && taskList[index].time !== "null"){
         // テーブル（rows）にタスクを移す
         item.task.push({
           name: "",
@@ -130,7 +130,7 @@ var app = new Vue({
     addDone(item, index2) {
       const vm = this;
       // タスクの内容と日付が空白ではない場合
-      if (item.task[index2].name && item.task[index2].time) {
+      if (item.task[index2].name !== "null" && item.task[index2].time !== "null") {
         // テーブル（rows）にタスクを移す
         const date = vm.parseTime(item.task[index2].time);
         vm.rows.push({
@@ -156,11 +156,11 @@ var app = new Vue({
       const vm = this;
       // 選択したレコードを削除する
       for (item in rowSelection) {
-        rows.splice(rowSelection[item].originalIndex, 1, "");
+        vm.rows.splice(rowSelection[item].originalIndex, 1, "");
       }
       // 配列内の空以外の要素を格納する
       const tmp = rows.filter(Boolean);
-　　// 配列内の全要素を削除する 　　
+      // 配列内の全要素を削除する 　　
       vm.rows.splice(0, vm.rows.length);
       // 要素の中身だけを配列に戻す
       vm.rows.push(...tmp);
