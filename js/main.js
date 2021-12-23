@@ -95,11 +95,11 @@ var app = new Vue({
         });
       } else {
         // タスクの内容が空白の場合
-        if(!taskList[index].name){
+        if(taskList[index].name !== "null"){
           alert("タスクグループが入力されていません");
         }
         // タスクの日付が空白の場合
-        if(!taskList[index].time){
+        if(taskList[index].time !== "null"){
           alert("タスクグループの日付が入力されていません");
         }
       }
@@ -142,11 +142,11 @@ var app = new Vue({
         item.task.splice(index2, 1);
       } else {
         // タスクの内容が空白の場合
-        if (!item.task[index2].name) {
+        if (item.task[index2].name !== "null") {
           alert("タスクが入力されていません");
         }
         // タスクの日付が空白の場合
-        if (!item.task[index2].time) {
+        if (item.task[index2].time !== "null") {
           alert("タスクの日付が入力されていません");
         }
       }
