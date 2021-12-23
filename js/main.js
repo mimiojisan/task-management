@@ -87,7 +87,7 @@ var app = new Vue({
     },
     // タスクの追加
     addTask(taskList, index, item) {
-      if(taskList[index].name !== "null" && taskList[index].time !== "null"){
+      if(taskList[index].name !== "" && taskList[index].time !== ""){
         // テーブル（rows）にタスクを移す
         item.task.push({
           name: "",
@@ -95,11 +95,11 @@ var app = new Vue({
         });
       } else {
         // タスクの内容が空白の場合
-        if(taskList[index].name !== "null"){
+        if(taskList[index].name !== ""){
           alert("タスクグループが入力されていません");
         }
         // タスクの日付が空白の場合
-        if(taskList[index].time !== "null"){
+        if(taskList[index].time !== ""){
           alert("タスクグループの日付が入力されていません");
         }
       }
@@ -130,7 +130,7 @@ var app = new Vue({
     addDone(item, index2) {
       const vm = this;
       // タスクの内容と日付が空白ではない場合
-      if (item.task[index2].name !== "null" && item.task[index2].time !== "null") {
+      if (item.task[index2].name !== "" && item.task[index2].time !== "") {
         // テーブル（rows）にタスクを移す
         const date = vm.parseTime(item.task[index2].time);
         vm.rows.push({
@@ -142,11 +142,11 @@ var app = new Vue({
         item.task.splice(index2, 1);
       } else {
         // タスクの内容が空白の場合
-        if (item.task[index2].name !== "null") {
+        if (item.task[index2].name !== "") {
           alert("タスクが入力されていません");
         }
         // タスクの日付が空白の場合
-        if (item.task[index2].time !== "null") {
+        if (item.task[index2].time !== "") {
           alert("タスクの日付が入力されていません");
         }
       }
